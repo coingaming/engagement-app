@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: app_database
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  mongodb:
+    image: mongo:6
+    container_name: mongo-db
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo_password
+      MONGO_INITDB_DATABASE: app_database
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+    name: postgres_data_volume
+  mongo_data:
+    name: mongo_data_volume
+
+networks:
+  app_network:
+    driver: bridge
